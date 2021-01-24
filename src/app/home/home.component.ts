@@ -182,10 +182,14 @@ export class HomeComponent implements OnInit {
         },
         scales: {
           xAxes: [{
-            display: true
+            display: true,
+            labelString: 'radius'
+
           }],
           yAxes: [{
-            display: true
+            display: true,
+            labelString: 'time'
+
           }],
         }
       }
