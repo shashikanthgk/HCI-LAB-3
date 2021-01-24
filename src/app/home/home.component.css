@@ -1,0 +1,40 @@
+a{
+    color: yellow;
+}
+
+
+.inst{
+
+    margin: 2rem;   
+    padding: 1rem;
+    padding-right: 2.3rem;
+    background-color: rgb(180, 164, 164);
+    font-size: 1.2rem;
+    word-wrap: break-word;
+    white-space: initial;
+   
+   
+   }
+   .button2{
+    border-radius: 4px;
+    background-color: #04018a;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 18px;
+    padding: 15px;
+    outline: none;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: -100px auto 25px;
+}
+   
+li{
+    white-space: nowrap;
+    padding:0.4rem;
+    word-wrap: break-word;
+    white-space: initial;
+
+}
+
+

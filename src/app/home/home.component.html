@@ -1,0 +1,44 @@
+<div *ngIf="!isDivVisible" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+    <div class="inst" style="width: 60%;">
+        <!-- instruction for the user  -->
+        <ul>
+            <li>
+                Click on this circle the moment you see it based on the given instruction
+            </li>
+            <li>
+                Try to remember set visually and mentally
+            </li>
+            <li>
+                Another circle with random size, color and position will appear on the screen.
+            </li>
+            <li>
+                Click on this next circle the moment you see it
+            </li>
+            <li>
+                Repeat steps 3 and 4 as long as circles are displayed.
+            </li>
+
+        </ul>
+    </div>
+    <div>
+        <button style="margin: 2rem;" (click)="start_game()" class="button2"><span>START
+            </span></button>
+    </div>
+</div>
+
+
+<div [style.visibility]="isDivVisible ? 'visible' : 'hidden'"
+    style="display: flex;flex-direction: column;align-items:center;justify-content: space-evenly;">
+    <div style="color: indigo;font-weight: bolder;">
+        <h2>Trial No : {{trianno}}/50</h2>
+    </div>
+    <div>
+        <h2>{{question}}</h2>
+    </div>
+    <div>
+        <canvas style="background-color: whitesmoke" #canvas width="1200vw" height="500vh"></canvas>
+    </div>
+    <div class="chart-container" style="position: relative; height:40vh; width:70vw">
+        <canvas #can>{{ Linearchart }}</canvas>
+    </div>
+</div>
