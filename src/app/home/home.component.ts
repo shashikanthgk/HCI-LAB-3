@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   elements = [];
   end = null
   trianno = 0;
+  restart = false;
   isDivVisible = false
   Linearchart = []
   ngOnInit(): void {
@@ -61,17 +62,17 @@ export class HomeComponent implements OnInit {
 
           this.elements = []
           this.circles = []
-          let NumCircles = 100,
+          let NumCircles = 30,
             protection = 100000,
             counter = 0
           while (this.circles.length < NumCircles && counter < protection) {
             counter++;
-            let width = 1100
-            let height = 450
+            let width = 950
+            let height = 400
             let circle = {
-              x: this.randomInteger(100, width),
-              y: this.randomInteger(100, height),
-              r: this.randomInteger(8, 50),
+              x: this.randomInteger(50, width),
+              y: this.randomInteger(50, height),
+              r: this.randomInteger(5, 40),
               c: this.randomInteger(0, 10),
             };
             let overlapping = false;
@@ -189,23 +190,24 @@ export class HomeComponent implements OnInit {
         }
       }
     });
+    this.restart = true
   }
 
 
 
   start_game() {
     this.isDivVisible = true;
-    let NumCircles = 100,
-      protection = 10000,
+    let NumCircles = 30,
+      protection = 100000,
       counter = 0
     while (this.circles.length < NumCircles && counter < protection) {
       counter++;
-      let width = 1100
-      let height = 450
+      let width = 900
+      let height = 400
       let circle = {
-        x: this.randomInteger(100, width),
-        y: this.randomInteger(100, height),
-        r: this.randomInteger(8, 50),
+        x: this.randomInteger(60, width),
+        y: this.randomInteger(60, height),
+        r: this.randomInteger(8, 40),
         c: this.randomInteger(0, 10),
       };
       let overlapping = false;
@@ -213,7 +215,7 @@ export class HomeComponent implements OnInit {
         var existing = this.circles[i];
 
         let intersects = Math.hypot(existing.x - circle.x, existing.y - circle.y) <= (existing.r + circle.r);
-        if (intersects || Math.abs(existing.r - circle.r) <= 2) {
+        if (intersects || Math.abs(existing.r - circle.r) <= 1) {
           overlapping = true;
           break;
         }
@@ -233,6 +235,12 @@ export class HomeComponent implements OnInit {
     this.start = Date.now();
     this.setup()
 
+  }
+
+  restart_()
+  {
+
+    window.location.reload()
   }
 
 }

@@ -36,9 +36,10 @@
         <h2>{{question}}</h2>
     </div>
     <div>
-        <canvas style="background-color: whitesmoke" #canvas width="1200vw" height="500vh"></canvas>
+        <canvas style="background-color: whitesmoke" #canvas width="1000vw" height="450vh"></canvas>
     </div>
-    <div class="chart-container" style="position: relative; height:40vh; width:70vw">
-        <canvas #can>{{ Linearchart }}</canvas>
+    <div>
+        <button *ngIf="restart" style="margin: 2rem;" (click)="restart_()" class="button2"><span>RESTART
+            </span></button>
     </div>
 </div>
