@@ -178,18 +178,24 @@ export class HomeComponent implements OnInit {
       },
       options: {
         legend: {
-          display: false
+          display: false,
+          labelString: 'Radius vs Time'
         },
         scales: {
           xAxes: [{
             display: true,
-            labelString: 'radius'
-
-          }],
+            scaleLabel: {
+              display: true,
+              labelString: 'Radius'
+            },
+          },
+        ],
           yAxes: [{
             display: true,
-            labelString: 'time'
-
+            scaleLabel: {
+              display: true,
+              labelString: 'Time'
+            },
           }],
         }
       }
@@ -243,7 +249,6 @@ export class HomeComponent implements OnInit {
 
   restart_()
   {
-
     window.location.reload()
   }
 
