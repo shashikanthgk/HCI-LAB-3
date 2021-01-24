@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
       this.elements.forEach((ele) => {
         if (this.check_a_point(x, y, ele.x, ele.y, ele.r)) {
 
-          if (this.trianno >=10) {
+          if (this.trianno >=49) {
             this.drawgraph();
           }
           var context = this.canvas.nativeElement.getContext('2d');
