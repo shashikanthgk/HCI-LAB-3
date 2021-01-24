@@ -8,7 +8,8 @@ import { Chart } from "chart.js"
 export class HomeComponent implements OnInit {
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
-  @ViewChild('can') can: ElementRef;
+  @ViewChild('canvas2', { static: true })
+  canvas2: ElementRef<HTMLCanvasElement>;  
   ctx = null
   color = ['red', 'blue', 'green', 'yellow', 'orange', 'black', 'cyan', 'purple', 'violet', 'darkgreen', 'tomato', 'teal']
   constructor() { }
@@ -23,10 +24,18 @@ export class HomeComponent implements OnInit {
   restart = false;
   isDivVisible = false
   Linearchart = []
+  Linearchart2 = []
+  start_dist = null
+  end_dist = null;
+  stat_dist = []
   ngOnInit(): void {
     // this.start_game()
   }
 
+  euclidean(c1,c2)
+  {
+    return Math.sqrt(Math.pow(c1.x-c2.x,2)+Math.pow(c1.y-c2.y,2));
+  }
 
   randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -41,38 +50,44 @@ export class HomeComponent implements OnInit {
       this.elements.forEach((ele) => {
         if (this.check_a_point(x, y, ele.x, ele.y, ele.r)) {
 
-          if (this.trianno >=49) {
+          if (this.trianno >=10) {
             this.drawgraph();
           }
           var context = this.canvas.nativeElement.getContext('2d');
           this.clearCanvas(context, this.ctx.canvas);
           if (!this.start) {
             this.start = Date.now()
+            this.start_dist = {x:x,y:y}
           }
           else {
             this.end = Date.now()
+            this.end_dist = {x:x,y:y}
             if (this.statistics[ele.r]) {
               this.statistics[ele.r].push(this.end - this.start)
+              this.stat_dist[ele.r].push(this.euclidean(this.end_dist,this.start_dist))
             }
             else {
               this.statistics[ele.r] = []
+              this.stat_dist[ele.r] = []
               this.statistics[ele.r].push(this.end - this.start)
+              this.stat_dist[ele.r].push(this.euclidean(this.end_dist,this.start_dist))
+
             }
           }
 
           this.elements = []
           this.circles = []
-          let NumCircles = 30,
-            protection = 100000,
-            counter = 0
+          let NumCircles = 40,
+            protection = 100000;
+           let counter = 0;
           while (this.circles.length < NumCircles && counter < protection) {
             counter++;
-            let width = 950
+            let width = 900
             let height = 400
             let circle = {
               x: this.randomInteger(50, width),
               y: this.randomInteger(50, height),
-              r: this.randomInteger(5, 40),
+              r: this.randomInteger(10, 40),
               c: this.randomInteger(0, 10),
             };
             let overlapping = false;
@@ -80,7 +95,7 @@ export class HomeComponent implements OnInit {
               var existing = this.circles[i];
 
               let intersects = Math.hypot(existing.x - circle.x, existing.y - circle.y) <= (existing.r + circle.r);
-              if (intersects || Math.abs(existing.r - circle.r) <= 3) {
+              if (intersects || Math.abs(existing.r - circle.r) <= 1) {
                 overlapping = true;
                 break;
               }
@@ -123,6 +138,7 @@ export class HomeComponent implements OnInit {
     this.ctx.stroke();
 
   }
+
   check_a_point(a, b, x, y, r) {
     var dist_points = (a - x) * (a - x) + (b - y) * (b - y);
     r *= r;
@@ -131,6 +147,7 @@ export class HomeComponent implements OnInit {
     }
     return false;
   }
+
   isIntersect(point, circle) {
     return Math.sqrt((point.x - circle.x) ** 2 + (point.y - circle.y) ** 2) < circle.radius;
   }
@@ -144,6 +161,7 @@ export class HomeComponent implements OnInit {
   drawgraph() {
     console.log(this.statistics)
     let avg = {}
+    let avg_dist = {}
     let x = []
     let y = []
     let data = []
@@ -159,7 +177,30 @@ export class HomeComponent implements OnInit {
       data.push({x:key,y:sum})
 
     }
+
+
+    let data2 = []
+    let x2 = []
+    let y2 = []
+    for (var key of Object.keys(this.stat_dist)) {
+      let sum2 = 0
+      for (let j = 0; j < this.stat_dist[key].length; j++) {
+        sum2 += this.stat_dist[key][j]
+      }
+      sum2 = sum2 / this.stat_dist[key].length
+      avg_dist[key] = sum2
+      x2.push(key)
+      y2.push(avg_dist[key])
+      data2.push({x:key,y:sum2})
+
+    }
+
+
+
+
+
     console.log(avg)
+    console.log(avg_dist)
 
     var ctx = this.canvas.nativeElement.getContext('2d')
 
@@ -172,14 +213,16 @@ export class HomeComponent implements OnInit {
             data: y,
             borderColor: '#3cb371',
             backgroundColor: "gray",
-            fill:false
+            fill:false,
+            label: 'Radius Vs Time',
+
           }
         ]
       },
       options: {
         legend: {
-          display: false,
-          labelString: 'Radius vs Time'
+          display: true,
+          text: 'Radius vs Time'
         },
         scales: {
           xAxes: [{
@@ -201,23 +244,74 @@ export class HomeComponent implements OnInit {
       }
     });
     this.restart = true
+
+    console.log(x2,y2)
+    var ctx2 = this.canvas2.nativeElement.getContext('2d')
+
+    this.Linearchart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: x2,
+        datasets: [
+          {
+            data: y2,
+            borderColor: 'red',
+            backgroundColor: "gray",
+            fill:false,
+            label: 'Distance Vs Time',
+
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+              display: true,
+              labels: {
+                  color: 'rgb(255, 99, 132)',
+                  title:{
+                    display:true,
+                    text:"ajhagu"
+                  }
+              }
+          }
+      },
+        scales: {
+          xAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Distance'
+            },
+          },
+        ],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Time'
+            },
+          }],
+        }
+      }
+    });
   }
 
 
 
   start_game() {
     this.isDivVisible = true;
-    let NumCircles = 30,
-      protection = 100000,
-      counter = 0
+    let NumCircles = 40,
+      protection = 100000;
+        let counter = 0
     while (this.circles.length < NumCircles && counter < protection) {
       counter++;
       let width = 900
       let height = 400
       let circle = {
-        x: this.randomInteger(60, width),
-        y: this.randomInteger(60, height),
-        r: this.randomInteger(8, 40),
+        x: this.randomInteger(50, width),
+        y: this.randomInteger(50, height),
+        r: this.randomInteger(10, 40),
         c: this.randomInteger(0, 10),
       };
       let overlapping = false;
@@ -242,7 +336,6 @@ export class HomeComponent implements OnInit {
       this.elements.push(data);
     })
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.start = Date.now();
     this.setup()
 
   }

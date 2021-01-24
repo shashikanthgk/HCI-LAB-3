@@ -38,6 +38,10 @@
     <div>
         <canvas style="background-color: whitesmoke" #canvas width="1000vw" height="450vh"></canvas>
     </div>
+    <div [style.visibility]="restart ? 'visible' : 'hidden'">
+        <canvas style="background-color: whitesmoke" #canvas2 width="1000vw" height="450vh"></canvas>
+    </div>
+
     <div>
         <button *ngIf="restart" style="margin: 2rem;" (click)="restart_()" class="button2"><span>RESTART
             </span></button>
