@@ -10,8 +10,10 @@ export class HomeComponent implements OnInit {
   canvas: ElementRef<HTMLCanvasElement>;
   @ViewChild('canvas2', { static: true })
   canvas2: ElementRef<HTMLCanvasElement>;  
+  @ViewChild('canvas3', { static: true })
+  canvas3: ElementRef<HTMLCanvasElement>;  
   ctx = null
-  color = ['red', 'blue', 'green', 'yellow', 'orange', 'black', 'cyan', 'purple', 'violet', 'darkgreen', 'tomato', 'teal']
+  color = ['red', 'blue', 'green', 'yellow', 'orange', 'black', 'cyan', 'purple', 'pink', 'skyblue', 'tomato', 'springgreen']
   constructor() { }
   circles = []
   question: string
@@ -28,6 +30,7 @@ export class HomeComponent implements OnInit {
   start_dist = null
   end_dist = null;
   stat_dist = []
+  current_circle = null
   ngOnInit(): void {
     // this.start_game()
   }
@@ -41,6 +44,9 @@ export class HomeComponent implements OnInit {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+
+
+  
   setup() {
 
     this.ctx.canvas.addEventListener('click', (event) => {
@@ -48,8 +54,7 @@ export class HomeComponent implements OnInit {
       var x = event.x - rect.left;
       var y = event.y - rect.top;
       this.elements.forEach((ele) => {
-        if (this.check_a_point(x, y, ele.x, ele.y, ele.r)) {
-
+        if (this.check_a_point(x, y, ele.x, ele.y, ele.r) && ele == this.current_circle) {
           if (this.trianno >=49) {
             this.drawgraph();
           }
@@ -77,8 +82,8 @@ export class HomeComponent implements OnInit {
 
           this.elements = []
           this.circles = []
-          let NumCircles = 40,
-            protection = 100000;
+          let NumCircles = 1,
+            protection = 10;
            let counter = 0;
           while (this.circles.length < NumCircles && counter < protection) {
             counter++;
@@ -119,12 +124,7 @@ export class HomeComponent implements OnInit {
     this.elements.forEach((ele) => {
       this.draw(ele.x, ele.y, ele.r, ele.c);
     })
-
-
-    let num = this.circles[this.randomInteger(0, this.circles.length - 1)].c
-    let size_num = this.randomInteger(0, 1)
-    this.question = `Select the ${this.size[size_num]} circle`
-
+    this.current_circle = this.circles[0]
   }
 
 
@@ -189,18 +189,28 @@ export class HomeComponent implements OnInit {
       }
       sum2 = sum2 / this.stat_dist[key].length
       avg_dist[key] = sum2
-      x2.push(key)
-      y2.push(avg_dist[key])
-      data2.push({x:key,y:sum2})
-
+      data2.push({x:avg_dist[key],y:avg[key]})
+    }
+    let distancedata = data2.sort((a, b) => b.x - a.x);
+    
+    for(let i = 0;i<distancedata.length;i++)
+    {
+      x2.push(parseInt(distancedata[i].x))
+      y2.push((distancedata[i].y))
     }
 
+    let x3 = []
+    let y3 = []
+    let a = y2[0]-1;
+    let b = y2[0]-3;
 
-
-
-
-    console.log(avg)
-    console.log(avg_dist)
+    for(let i = 0;i<y2.length;i++)
+    {
+      x3.push(Math.log2(2*y2[i])/x2[i])
+      y3.push(a+b*(Math.log2(2*y2[i])/x2[i]))
+    }
+    
+    console.log(x3,y3)
 
     var ctx = this.canvas.nativeElement.getContext('2d')
 
@@ -244,8 +254,6 @@ export class HomeComponent implements OnInit {
       }
     });
     this.restart = true
-
-    console.log(x2,y2)
     var ctx2 = this.canvas2.nativeElement.getContext('2d')
 
     this.Linearchart2 = new Chart(ctx2, {
@@ -295,14 +303,66 @@ export class HomeComponent implements OnInit {
         }
       }
     });
+
+
+    var ctx3 = this.canvas3.nativeElement.getContext('2d')
+
+    this.Linearchart2 = new Chart(ctx3, {
+      type: 'line',
+      data: {
+        labels: x3,
+        datasets: [
+          {
+            data: y3,
+            borderColor: 'blue',
+            backgroundColor: "gray",
+            fill:false,
+            label: 'ID Vs MT',
+
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+              display: true,
+              labels: {
+                  color: 'rgb(255, 99, 132)',
+                  title:{
+                    display:true,
+                    text:"ajhagu"
+                  }
+              }
+          }
+      },
+        scales: {
+          xAxes: [{
+            display: false,
+            scaleLabel: {
+              display: true,
+              labelString: 'ID'
+            },
+          },
+        ],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'MT'
+            },
+          }],
+        }
+      }
+    });
+
   }
 
 
 
   start_game() {
     this.isDivVisible = true;
-    let NumCircles = 40,
-      protection = 100000;
+    let NumCircles = 1,
+      protection = 10;
         let counter = 0
     while (this.circles.length < NumCircles && counter < protection) {
       counter++;

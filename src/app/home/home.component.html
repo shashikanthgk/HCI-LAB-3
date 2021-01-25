@@ -32,16 +32,31 @@
     <div style="color: indigo;font-weight: bolder;">
         <h2>Trial No : {{trianno}}/50</h2>
     </div>
-    <div>
-        <h2>{{question}}</h2>
+    <div [style.visibility]="restart ? 'visible' : 'hidden'">
+        <h1>
+            Graph of Radius Vs Time between UI Elements
+        </h1>
     </div>
     <div>
         <canvas style="background-color: whitesmoke" #canvas width="1000vw" height="450vh"></canvas>
     </div>
     <div [style.visibility]="restart ? 'visible' : 'hidden'">
+        <h1>
+            Graph of Distance Vs Time between UI Elements
+        </h1>
+    </div>
+    <div [style.visibility]="restart ? 'visible' : 'hidden'">
         <canvas style="background-color: whitesmoke" #canvas2 width="1000vw" height="450vh"></canvas>
     </div>
 
+    <div [style.visibility]="restart ? 'visible' : 'hidden'">
+        <h1>
+            Final Graph According to Fitts Law
+        </h1>
+    </div>
+    <div [style.visibility]="restart ? 'visible' : 'hidden'">
+        <canvas style="background-color: whitesmoke" #canvas3 width="1000vw" height="450vh"></canvas>
+    </div>
     <div>
         <button *ngIf="restart" style="margin: 2rem;" (click)="restart_()" class="button2"><span>RESTART
             </span></button>
